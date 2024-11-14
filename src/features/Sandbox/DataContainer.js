@@ -6,9 +6,14 @@ import { makeServer } from '../../mocks';
 const DataContainer = () => {
   const [selectedRoute, setSelectedRoute] = useState('');
   
+  // Initialize mock server only once when component mounts
   useEffect(() => {
-    makeServer();
-  }, []);
+    const server = makeServer();
+    return () => {
+      // Cleanup server when component unmounts
+      if (server?.shutdown) server.shutdown();
+    };
+  }, []); // Empty dependency array means it only runs once
   
   const routes = useMemo(() => [
     { value: 'sales', label: 'Sales' },
@@ -31,6 +36,7 @@ const DataContainer = () => {
 
   return (
     <div>
+      <h1>Please, select a chart</h1>
       <SelectList 
         items={routes}
         onChange={(e) => setSelectedRoute(e.target.value)}
