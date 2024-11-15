@@ -1,51 +1,45 @@
-import React, { Component } from "react";
-import Aside from "../../common/components/Aside";
+import React, { useState, useEffect } from "react";
+import Aside from "@components/Aside";
 import ChartContainer from "./ChartContainer";
-import Layout from "../../common/components/Layout";
-import Main from "../../common/components/Main";
+import Layout from "@components/Layout";
+import Main from "@components/Main";
+import SelectList from "@components/SelectList";
 import SummaryContainer from "./SummaryContainer";
-import { connect } from "react-redux";
-import { fetchDataset } from "./DashboardSlice";
+import { useData } from "@context/DataContext";
 
-class DashboardShell extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { selectedLabel: "" };
+const DashboardShell = () => {
+  const [selectedLabel, setSelectedLabel] = useState("");
+  const { fetchDataset } = useData();
 
-    this.handleSelectChange = this.handleSelectChange.bind(this);
-  }
+  useEffect(() => {
+    // Initially load totals
+    fetchDataset("/api/totals");
+  }, [fetchDataset]);
 
-  componentDidMount() {
-    this.props.fetchDataset(`${process.env.REACT_APP_BASE_URL}/totals/`);
-  }
-
-  handleSelectChange(event) {
+  const handleSelectChange = (event) => {
     const selectedLabel = event.target.selectedOptions[0].label;
-    this.props.fetchDataset(event.target.value);
-    this.setState({ selectedLabel });
-  }
+    fetchDataset(event.target.value);
+    setSelectedLabel(selectedLabel);
+  };
 
-  buildSelect() {
-    const optionsForSelect = [
-      { label: "Sales", value: `${process.env.REACT_APP_BASE_URL}/sales/` },
-      {
-        label: "Subscriptions",
-        value: `${process.env.REACT_APP_BASE_URL}/subscriptions/`
-      }
-    ];
+  const optionsForSelect = [
+    { label: "Sales", value: "/api/sales" },
+    {
+      label: "Subscriptions",
+      value: "/api/subscriptions"
+    }
+  ];
 
-    return (
-      <>
+  return (
+    <Layout>
+      <Aside>
+        <h2># Polly dashboard</h2>
         <label htmlFor="select-product">Please select a chart:</label>
         <div className="field">
-          <select id="select-product" onChange={this.handleSelectChange}>
-            <option value="">--</option>
-            {optionsForSelect.map(option => (
-              <option key={option.label} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+          <SelectList 
+            items={optionsForSelect}
+            onChange={handleSelectChange}
+          />
           <div className="chevron-wrapper flex">
             <svg
               className="chevron"
@@ -56,31 +50,16 @@ class DashboardShell extends Component {
             </svg>
           </div>
         </div>
-      </>
-    );
-  }
-
-  render() {
-    return (
-      <Layout>
-        <Aside>
-          <h2># Polly dashboard</h2>
-          {this.buildSelect()}
-        </Aside>
-        <Main>
-          <h1>
-            Welcome, <span className="bold">learner!</span>
-          </h1>
-          <SummaryContainer />
-          <ChartContainer selectedLabel={this.state.selectedLabel} />
-        </Main>
-      </Layout>
-    );
-  }
-}
-
-const mapDispatchToProps = {
-  fetchDataset
+      </Aside>
+      <Main>
+        <h1>
+          Welcome, <span className="bold">learner!</span>
+        </h1>
+        <SummaryContainer />
+        {selectedLabel && <ChartContainer selectedLabel={selectedLabel} />}
+      </Main>
+    </Layout>
+  );
 };
 
-export default connect(null, mapDispatchToProps)(DashboardShell);
+export default DashboardShell;

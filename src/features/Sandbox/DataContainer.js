@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import SelectList from './SelectList';
+import SelectList from '@components/SelectList';
 import DataFetcher from './DataFetcher';
-import { makeServer } from '../../mocks';
+import { makeServer } from '@common/mocks';
 
 const DataContainer = () => {
   const [selectedRoute, setSelectedRoute] = useState('');

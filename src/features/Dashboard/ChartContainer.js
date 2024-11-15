@@ -1,14 +1,25 @@
 import React from "react";
 import LineChart from "./LineChart";
-import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { useData } from "@context/DataContext";
+import Loading from "@components/Loading";
 
-const ChartContainer = ({ dataset, selectedLabel }) => {
+const ChartContainer = ({ selectedLabel }) => {
+  const { data: dataset, loading } = useData();
+
+  if (loading) {
+    return (
+      <div className="chart-container">
+        <Loading />
+      </div>
+    );
+  }
+
   const chartLabels = dataset.map(dataPoint => dataPoint.timestamp);
   const chartValues = dataset.map(dataPoint => dataPoint.amount);
 
   return (
-    <div>
+    <div className="chart-container">
       <LineChart
         chartLabels={chartLabels}
         chartValues={chartValues}
@@ -18,13 +29,8 @@ const ChartContainer = ({ dataset, selectedLabel }) => {
   );
 };
 
-const mapStateToProps = state => {
-  return { dataset: state.dataset.data };
-};
-
 ChartContainer.propTypes = {
-  dataset: PropTypes.array.isRequired,
   selectedLabel: PropTypes.string.isRequired
 };
 
-export default connect(mapStateToProps)(ChartContainer);
+export default ChartContainer;

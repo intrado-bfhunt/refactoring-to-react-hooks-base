@@ -26,6 +26,14 @@ export function makeServer() {
       decimalDigits: 0
     });
 
+    // Calculate totals
+    const calculateTotal = (data) => {
+      return data.reduce((sum, item) => sum + item.amount, 0);
+    };
+
+    const salesTotal = calculateTotal(sales);
+    const subscriptionsTotal = calculateTotal(subscriptions);
+
     return createServer({
       routes() {
         this.namespace = "api";
@@ -36,6 +44,13 @@ export function makeServer() {
 
         this.get("/subscriptions", () => ({
           data: subscriptions
+        }));
+
+        this.get("/totals", () => ({
+          data: {
+            salesTotal,
+            subscriptionsTotal
+          }
         }));
       }
     });

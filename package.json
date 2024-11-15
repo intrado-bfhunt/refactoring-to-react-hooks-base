@@ -10,15 +10,12 @@
     "react": "^16.13.1",
     "react-chartjs-2": "^2.9.0",
     "react-dom": "^16.13.1",
-    "react-redux": "^7.2.0",
-    "react-scripts": "3.4.1",
-    "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "react-scripts": "^5.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -37,7 +34,8 @@
     ]
   },
   "devDependencies": {
-    "miragejs": "^0.1.40",
+    "@craco/craco": "^7.1.0",
+    "miragejs": "^0.1.48",
     "prop-types": "^15.7.2",
     "time-series-data-generator": "^0.1.5"
   }

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "@components/*": ["common/components/*"],
+      "@hooks/*": ["common/hooks/*"],
+      "@context/*": ["context/*"],
+      "@features/*": ["features/*"],
+      "@common/*": ["common/*"],
+      "@mocks/*": ["mocks/*"]
+    }
+  },
+  "include": ["src"]
+}

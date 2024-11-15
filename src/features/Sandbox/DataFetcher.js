@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useFetch } from '../../common/hooks';
-import Loading from '../../common/components/Loading';
+import { useFetch } from '@hooks';
+import Loading from '@components/Loading';
 
 const DataFetcher = ({ url, render }) => {
   const { data, loading, error } = useFetch(url);
